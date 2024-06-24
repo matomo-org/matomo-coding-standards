@@ -1,3 +1,9 @@
+# To set up run below command
+```
+composer install
+```
+
+
 # To test your repository execute below command
 
 ```
