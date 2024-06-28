@@ -1,3 +1,4 @@
 phpcs-report.xml
 composer.lock
 vendor
+.idea
