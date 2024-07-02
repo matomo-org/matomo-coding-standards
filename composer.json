@@ -1,8 +1,11 @@
 {
     "name": "matomo-org/matomo-coding-standards",
+    "description": "PHP CodeSniffer ruleset implementing the Matomo coding standards extending PSR12 coding standards.",
+    "type": "phpcodesniffer-standard",
     "require": {
+        "php": "~7.2 || ~8.0",
         "slevomat/coding-standard": "~8.14.0",
-        "squizlabs/php_codesniffer": "~3.6",
+        "squizlabs/php_codesniffer": "~3.10",
         "phpstan/phpdoc-parser": "~1.24.0"
     },
     "require-dev": {},
