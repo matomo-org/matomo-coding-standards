@@ -13,5 +13,5 @@ composer install
 # To test your plugin repository execute below command
 
 ```
-./vendor/bin/phpcs --report-full --standard=Standard/GoogleAnalyticsImporter/phpcs.xml --report-checkstyle=./phpcs-report.xml /path/to/matomo/plugins/GoogleAnalyticsImporter/
+./vendor/bin/phpcs --report-full --standard=Matomo/ruleset.xml --report-checkstyle=./phpcs-report.xml /path/to/matomo/plugins/GoogleAnalyticsImporter/
 ```
