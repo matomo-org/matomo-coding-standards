@@ -6,7 +6,7 @@ composer install
 # To test Matomo core
 
 ```
-./vendor/bin/phpcs --report-full --standard=Standard/Matomo/ruleset.xml --report-checkstyle=./phpcs-report.xml /path/to/matomo
+./vendor/bin/phpcs --report-full --standard=Matomo/ruleset.xml --report-checkstyle=./phpcs-report.xml /path/to/matomo
 ```
 
 
