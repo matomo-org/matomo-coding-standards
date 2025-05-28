@@ -47,4 +47,19 @@
         <!-- still allow those functions in tests -->
         <exclude-pattern>*/tests/*</exclude-pattern>
     </rule>
+
+    <rule ref="Matomo.Security.SensitiveParameter">
+        <property name="sensitiveKeywords" type="array">
+            <element value="password"/>
+            <element value="passwordHash"/>
+            <element value="passwordHashed"/>
+            <element value="salt"/>
+            <element value="authToken"/>
+            <element value="tokenAuth"/>
+            <element value="token_auth"/>
+            <element value="secret"/>
+            <element value="apiKey"/>
+        </property>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+    </rule>
 </ruleset>
