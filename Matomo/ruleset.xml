@@ -60,6 +60,8 @@
                 <element value="token_auth"/>
                 <element value="secret"/>
                 <element value="apiKey"/>
+                <element value="access_token"/>
+                <element value="accessToken"/>
             </property>
         </properties>
         <exclude-pattern>*/tests/*</exclude-pattern>
