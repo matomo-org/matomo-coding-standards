@@ -1,4 +1,6 @@
-phpcs-report.xml
-composer.lock
-vendor
-.idea
+/.idea/
+/vendor/
+
+/.phpunit.result.cache
+/phpcs-report.xml
+/composer.lock
