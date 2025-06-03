@@ -28,36 +28,38 @@ class SensitiveParameterSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $functionToken = $tokens[$stackPtr];
-
         $openParen = $phpcsFile->findNext(T_OPEN_PARENTHESIS, $stackPtr);
         $closeParen = $tokens[$openParen]['parenthesis_closer'];
 
         for ($i = $openParen + 1; $i < $closeParen; $i++) {
-            if ($tokens[$i]['code'] === T_VARIABLE) {
-                $paramName = ltrim($tokens[$i]['content'], '$');
+            if ($tokens[$i]['code'] !== T_VARIABLE) {
+                continue;
+            }
 
-                // Check if the parameter name contains a sensitive keyword
-                if (!$this->isSensitiveName($paramName)) {
-                    continue;
-                }
+            $paramName = ltrim($tokens[$i]['content'], '$');
 
-                // Find the type hint before the variable (if any)
-                $typeHint = $this->getTypeHint($phpcsFile, $i);
+            // Check if the parameter name contains a sensitive keyword
+            if (!$this->isSensitiveName($paramName)) {
+                continue;
+            }
 
-                if ($typeHint !== null && !$this->isScalarType($typeHint)) {
-                    // Has a non-scalar type: skip
-                    continue;
-                }
+            // Find the type hint before the variable (if any)
+            $typeHint = $this->getTypeHint($phpcsFile, $i);
 
-                // Check if #[\SensitiveParameter] is present
-                if (!$this->hasSensitiveAttributeAbove($phpcsFile, $i)) {
-                    $phpcsFile->addError(
-                        "Parameter \${$paramName} seems sensitive and has no complex type but is missing #[\\SensitiveParameter] attribute.",
-                        $i,
-                        'MissingSensitiveParameterAttribute'
-                    );
-                }
+            if ($typeHint !== null && !$this->isScalarType($typeHint)) {
+                // Has a non-scalar type: skip
+                continue;
+            }
+
+            $paramStartPtr = $phpcsFile->findPrevious([T_OPEN_PARENTHESIS, T_VARIABLE], $i - 1);
+
+            // Check if #[\SensitiveParameter] is present
+            if (!$this->hasSensitiveAttribute($phpcsFile, $i, $paramStartPtr)) {
+                $phpcsFile->addError(
+                    "Parameter \${$paramName} seems sensitive and has no complex type but is missing #[\\SensitiveParameter] attribute.",
+                    $i,
+                    'MissingSensitiveParameterAttribute'
+                );
             }
         }
     }
@@ -103,27 +105,12 @@ class SensitiveParameterSniff implements Sniff
         return null; // No type hint
     }
 
-    private function hasSensitiveAttributeAbove(File $phpcsFile, int $paramPtr): bool
+    private function hasSensitiveAttribute(File $phpcsFile, int $paramVarPtr, int $paramStartPtr): bool
     {
         $tokens = $phpcsFile->getTokens();
-        $line = $tokens[$paramPtr]['line'];
 
-        for ($i = $paramPtr - 1; $i > 0; $i--) {
-            if ($tokens[$i]['line'] < $line - 1) {
-                break;
-            }
-
-            if (
-                $tokens[$i]['code'] === T_ATTRIBUTE_END &&
-                strpos($phpcsFile->getTokensAsString($i - 5, 10), 'SensitiveParameter') !== false
-            ) {
-                return true;
-            }
-
-            if (
-                $tokens[$i]['code'] === T_STRING &&
-                strtolower($tokens[$i]['content']) === 'sensitiveparameter'
-            ) {
+        for ($i = $paramStartPtr; $i < $paramVarPtr; $i++) {
+            if ($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === 'SensitiveParameter') {
                 return true;
             }
         }
