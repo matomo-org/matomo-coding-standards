@@ -54,6 +54,7 @@
                 <element value="password"/>
                 <element value="passwordHash"/>
                 <element value="passwordHashed"/>
+                <element value="passwordConfirmation"/>
                 <element value="salt"/>
                 <element value="authToken"/>
                 <element value="tokenAuth"/>
